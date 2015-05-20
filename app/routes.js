@@ -4,11 +4,11 @@ module.exports = function(app,apiRoutes,jwt,User) {
 	// authentication (no middleware necessary since this isnt authenticated)
 	// ---------------------------------------------------------
 
-	// on routes that end in /users
+	// on routes that end in /register
 	// ----------------------------------------------------
-	apiRoutes.route('/users')
+	apiRoutes.route('/register')
 
-	    // create a user (accessed at POST http://localhost:8080/api/users)
+	    // create a user (accessed at POST http://localhost:8080/api/register)
 	    .post(function(req, res) {
 	        console.log('I\'m starting to create a new user');
 	        var user = new User();      // create a new instance of the user model
@@ -27,22 +27,8 @@ module.exports = function(app,apiRoutes,jwt,User) {
 	        });
 	    });
 
-	    // get all the users (accessed at GET http://localhost:8080/api/users)
-	    /*
-	    .get(function(req, res) {
-	        User.find(function(err, users) {
-	            if (err)
-	                res.send(err);
-
-	            res.json(users);
-	        });
-	        
-	    });
-		*/
-
-
-	// http://localhost:8080/api/authenticate
-	apiRoutes.post('/authenticate', function(req, res) {
+	// http://localhost:8080/api/signin
+	apiRoutes.post('/signin', function(req, res) {
 
 		// find the user
 		User.findOne({
@@ -112,12 +98,6 @@ module.exports = function(app,apiRoutes,jwt,User) {
 			
 		}
 		
-	});
-
-	apiRoutes.get('/logout',function(req,res){
-		var token = req.body.token || req.param('token') || req.headers['x-access-token'];
-		token.nbf = Date.now();
-		return res.json({ success: true, message: 'You know.' });	
 	});
 
 	// ---------------------------------------------------------
