@@ -1,20 +1,19 @@
 // =================================================================
 // get the packages we need ========================================
 // =================================================================
-var express 	= require('express');
+var express     = require('express');
 var app         = express();
+var cors        = require('cors');
 var bodyParser  = require('body-parser');
-var morgan      = require('morgan');
 var mongoose    = require('mongoose');
+var morgan      = require('morgan');
 
-var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
-var config = require('./config'); // get our config file
-var User   = require('./app/models/user'); // get our mongoose model
+var config      = require('./config'); // get our config file
 
 // =================================================================
 // configuration ===================================================
 // =================================================================
-var port = process.env.PORT || 8080; // used to create, sign, and verify tokens
+var port = process.env.PORT || 8080; // port where app will be runing
 mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret); // secret variable
 
@@ -22,6 +21,8 @@ app.set('superSecret', config.secret); // secret variable
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// seting up app to have cors
+app.use(cors());
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 
@@ -31,7 +32,7 @@ app.use(morgan('dev'));
 
 // basic route (http://localhost:8080)
 app.get('/', function(req, res) {
-	res.send('Hello! The API is at http://localhost:' + port + '/api');
+    res.send('Hello! The API is at http://localhost:' + port + '/api');
 });
 
 // ---------------------------------------------------------
@@ -39,12 +40,20 @@ app.get('/', function(req, res) {
 // ---------------------------------------------------------
 var apiRoutes = express.Router(); 
 
-require('./app/routes.js')(app,apiRoutes,jwt,User);
+// loading default routes
+require('./app/routes/default.js')(app,apiRoutes);
 
 app.use('/api', apiRoutes);
 
-// =================================================================
-// start the server ================================================
-// =================================================================
-app.listen(port);
-console.log('Magic happens at http://localhost:' + port);
+
+// Making prettier unauthorized method
+app.use(function(err, req, res, next){
+    if (err.constructor.name === 'UnauthorizedError') {
+        res.status(401).send('Unauthorized');
+    }
+});
+
+// Listening on port
+app.listen(port, function () {
+    console.log('listening on http://localhost:'+port);
+});

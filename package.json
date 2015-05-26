@@ -1,12 +1,19 @@
 {
-  "name": "node-token-authentication",
-  "main": "server.js",
+  "name": "auth-token-template",
+  "version": "0.0.1",
   "dependencies": {
-  	"bcryptjs": "~2.0.2",
-    "jsonwebtoken": "~5.0.0",
-    "express": "~4.9.8",
-    "body-parser": "~1.9.2",
+    "body-parser": "^1.9.0",
+    "express": "~4.9.0",
+    "express-jwt": "~0.2.1",
+    "jsonwebtoken": "~0.4.0",
+    "bcryptjs": "~2.0.2",
     "mongoose": "~3.8.19",
-    "morgan": "~1.5.0"
-  }
+    "morgan": "~1.5.0",
+    "cors": "latest"
+  },
+  "description": "Example of Token-based authentication in [AngularJS](http://angularjs.org) with [Express](http://expressjs.com).",
+  "main": "server.js",
+
+  "author": "Eisenheim38",
+  "license": "MIT"
 }

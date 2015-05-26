@@ -1,15 +1,3 @@
-/*
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-// set up a mongoose model
-module.exports = mongoose.model('User', new Schema({ 
-	name: String, 
-	password: String, 
-	admin: Boolean 
-}));
-*/
-
 var mongoose = require('mongoose'),
     bcrypt = require("bcryptjs"),
     Schema = mongoose.Schema;
@@ -20,6 +8,14 @@ var UserSchema = new Schema({
         type: String,
         unique: true,
         required: true
+    },
+
+    name: {
+        type: String
+    },
+
+    lastname:{
+        type: String
     },
 
     password: {
