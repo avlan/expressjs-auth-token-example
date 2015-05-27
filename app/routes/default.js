@@ -33,6 +33,16 @@ module.exports = function(app,apiRoutes) {
             });
         });
 
+    apiRoutes.get('/users/:username', function(req, res) {
+        console.log(req.params.username);
+        User.findOne({username: req.params.username}, function(err, user) {
+            console.log(user);
+            if (err)
+                res.send(err);
+            res.json(user);
+        });
+    });
+
     // http://localhost:8080/api/authenticate
     apiRoutes.post('/authenticate', function(req, res) {
 
@@ -90,5 +100,6 @@ module.exports = function(app,apiRoutes) {
     // We are going to protect /api routes with JWT
     app.use('/api/check', expressJwt({secret: app.get('superSecret')}));
     app.use('/api/restricted', expressJwt({secret: app.get('superSecret')}));
+    app.use('/api/users/:username', expressJwt({secret: app.get('superSecret')}));
 
 }
