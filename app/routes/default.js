@@ -33,15 +33,50 @@ module.exports = function(app,apiRoutes) {
             });
         });
 
-    apiRoutes.get('/users/:username', function(req, res) {
-        console.log(req.params.username);
-        User.findOne({username: req.params.username}, function(err, user) {
-            console.log(user);
-            if (err)
-                res.send(err);
-            res.json(user);
+    // return information about that user
+    apiRoutes.route('/users/:username')
+
+        .get(function(req, res) {
+            if (req.params.username != req.user.username){
+                res.status(401).send('Wrong user');
+            }else{
+                User.findOne({username: req.params.username}, function(err, user) {
+                    console.log(user);
+                    if (err)
+                        res.send(err);
+                    res.json(user);
+                });
+            }
+        })
+
+        .put(function(req, res) {
+            //A little validation to see if username is the same
+            if (req.params.username != req.user.username){
+                res.status(401).send('Wrong user');
+            }else{
+                // use our word model to find the word we want
+                User.findOne({username: req.params.username}, function(err, user) {
+
+                    if (err)
+                        res.send(err);
+
+                    user.username = req.body.username;  // set the user username (comes from the request)
+                    user.password = req.body.password;
+                    user.name = req.body.name;
+                    user.lastname = req.body.lastname;
+                    console.log(user.username,user.password,user.name,user.lastname);
+
+                    // save the user and check for errors
+                    user.save(function(err) {
+                        if (err)
+                            res.send(err);
+
+                        res.json({ message: 'User updated!' });
+                    });
+
+                });
+            }
         });
-    });
 
     // http://localhost:8080/api/authenticate
     apiRoutes.post('/authenticate', function(req, res) {
