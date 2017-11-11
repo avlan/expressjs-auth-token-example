@@ -32,7 +32,7 @@ app.use(morgan('dev'));
 
 // basic route (http://localhost:8080)
 app.get('/', function(req, res) {
-    res.send('Hello! The API is at http://localhost:' + port + '/api');
+  res.send('Hello! The API is at http://localhost:' + port + '/api');
 });
 
 // ---------------------------------------------------------
@@ -41,19 +41,19 @@ app.get('/', function(req, res) {
 var apiRoutes = express.Router(); 
 
 // loading default routes
-require('./app/routes/default.js')(app,apiRoutes);
+require('./app/routes/default.js')(app, apiRoutes);
 
 app.use('/api', apiRoutes);
 
 
 // Making prettier unauthorized method
 app.use(function(err, req, res, next){
-    if (err.constructor.name === 'UnauthorizedError') {
-        res.status(401).send('Unauthorized');
-    }
+  if (err.constructor.name === 'UnauthorizedError') {
+    res.status(401).send('Unauthorized');
+  }
 });
 
 // Listening on port
 app.listen(port, function () {
-    console.log('listening on http://localhost:'+port);
+  console.log('listening on http://localhost:' + port);
 });
